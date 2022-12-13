@@ -21,10 +21,8 @@ def upload_files(request: HttpRequest):
 
     if request.method == "POST":
 
-        print(context['form'].errors)
-
         if context['form'].is_valid():
-            created_object = context['form'].save()
+            context['form'].save()
 
             messages.success(request, "Changements sauvegardés")
             return redirect('/')

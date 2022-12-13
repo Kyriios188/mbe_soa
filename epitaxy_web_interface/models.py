@@ -3,6 +3,7 @@ from django.db import models
 
 class Experiment(models.Model):
     code = models.CharField(
+        unique=True,
         max_length=5,
         verbose_name="Code de l'expérience",
         help_text="Exemple : A1417"
