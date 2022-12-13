@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     "epitaxy_web_interface",
     "crispy_forms",
     'django_cleanup.apps.CleanupConfig',
+    "django_extensions"
 ]
 
 MIDDLEWARE = [
