@@ -4,7 +4,7 @@ from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.contrib import messages
 
-from models import Experiment
+from .models import Experiment
 
 from .forms import ExperimentForm
 
@@ -29,8 +29,9 @@ def upload_files(request: HttpRequest):
             instance: Experiment = context['form'].save()
 
             messages.success(request, "Changements sauvegardés")
-            requests.get(url='127.0.0.1:8001', params={'code': instance.code})
-            return redirect('/')
+            r = requests.get(url='http://127.0.0.1:8001/start', params={'code': instance.code})
+            body = r.content
+            return HttpResponse(f"Début du processing pour {body}")
 
     return render(request, 'epitaxy_web_interface/form.html', context)
 
