@@ -1,6 +1,10 @@
+import requests
+
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.contrib import messages
+
+from models import Experiment
 
 from .forms import ExperimentForm
 
@@ -22,9 +26,10 @@ def upload_files(request: HttpRequest):
     if request.method == "POST":
 
         if context['form'].is_valid():
-            context['form'].save()
+            instance: Experiment = context['form'].save()
 
             messages.success(request, "Changements sauvegardés")
+            requests.get(url='127.0.0.1:8001', params={'code': instance.code})
             return redirect('/')
 
     return render(request, 'epitaxy_web_interface/form.html', context)

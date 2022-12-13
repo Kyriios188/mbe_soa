@@ -14,7 +14,32 @@
 
     <title>{% block title %}{% endblock %}</title>
 
+
+    {#  This block is to display messages manually sent by the backend  #}
+    <div class="center center-table" style="width: 50%;">
+        {% if messages %}
+            {% for msg in messages|slice:":1" %}
+                {% if msg.tags == "error" %}
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong>Erreur : </strong>{{ msg }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% elif msg.tags == "success" %}
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <strong>Succès ! </strong>{{ msg }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% elif msg.tags == "warning" %}
+                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                        <strong>Attention : </strong>{{ msg }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    </div>
 </head>
+
 
 {% block content %}
 
