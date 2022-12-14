@@ -26,15 +26,30 @@ def upload_files(request: HttpRequest):
     if request.method == "POST":
 
         if context['form'].is_valid():
-            instance: Experiment = context['form'].save()
+            instance: Experiment = context['form'].save(commit=False)
 
-            messages.success(request, "Changements sauvegardés")
+            # Only save if the response is not 503.
             r = requests.get(url='http://127.0.0.1:8001/start', params={'code': instance.code})
-            body = r.content
-            return HttpResponse(f"Début du processing pour {body}")
+            if r.status_code == 200:
+                messages.success(request, "Changements sauvegardés")
+                instance.save()
+                return redirect('/')
+            else:
+                if r.status_code == 503:
+                    messages.error(
+                        request,
+                        f"Le serveur est occupé avec la requête précédente. Veuillez réessayer plus tard."
+                    )
+                else:
+                    messages.error(request, f"Une erreur inattendue s'est produite ({r.status_code}).")
 
     return render(request, 'epitaxy_web_interface/form.html', context)
 
 
 def predict(request: HttpRequest):
     return HttpResponse("Prédiction du résultat final")
+
+
+def end(request: HttpRequest):
+    # TODO: listen for the orchestrator's answer and send a message when finished.
+    pass
