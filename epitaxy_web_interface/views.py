@@ -50,6 +50,11 @@ def predict(request: HttpRequest):
     return HttpResponse("Prédiction du résultat final")
 
 
-def end(request: HttpRequest):
-    # TODO: listen for the orchestrator's answer and send a message when finished.
-    pass
+def end(request: HttpRequest, code: int):
+    # TODO: this is useless, have an actual interface with the CT status
+    if code == 201:
+        messages.success(request, "Les données ont été sauvegardées.")
+    else:
+        messages.error(request, f"Le processus de sauvegarde a échoué (erreur {code})")
+
+    return HttpResponse(status=200)
