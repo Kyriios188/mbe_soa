@@ -29,7 +29,7 @@ def upload_files(request: HttpRequest):
             instance: Experiment = context['form'].save(commit=False)
 
             # Only save if the response is not 503.
-            r = requests.get(url='http://127.0.0.1:8001/start', params={'code': instance.code})
+            r = requests.get(url='http://172.20.0.3:8001/start', params={'code': instance.code})
             if r.status_code == 200:
                 messages.success(request, "Changements sauvegardés")
                 instance.save()
